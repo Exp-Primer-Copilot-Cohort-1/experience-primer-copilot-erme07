@@ -1,18 +1,36 @@
-// Create web server by using Express
-// Date: 2021/05/24
-// Creator: Nhat Hoang
+// Create web server
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const commentController = require('../controllers/commentController');
-const authMiddleware = require('../middlewares/authMiddleware');
+const commentController = require("../controllers/commentController");
+const passport = require("passport");
 
-router.get('/', commentController.getComments);
+// Create comment
+router.post(
+  "/create",
+  passport.authenticate("jwt", { session: false }),
+  commentController.create
+);
 
-router.post('/', authMiddleware, commentController.createComment);
+// Delete comment
+router.delete(
+  "/delete/:id",
+  passport.authenticate("jwt", { session: false }),
+  commentController.delete
+);
 
-router.put('/', authMiddleware, commentController.updateComment);
+// Edit comment
+router.put(
+  "/edit/:id",
+  passport.authenticate("jwt", { session: false }),
+  commentController.edit
+);
 
-router.delete('/', authMiddleware, commentController.deleteComment);
+// Get comments
+router.get(
+  "/get/:id",
+  passport.authenticate("jwt", { session: false }),
+  commentController.get
+);
 
 module.exports = router;
